@@ -1,0 +1,40 @@
+:root{
+    --textColor: white;
+    --backgroundColor: black;
+}
+
+body{
+    background-color: var(--backgroundColor);
+    color: var(--textColor);
+}
+
+.jumbotron{
+    background: url('/assets/banner.jpg') center center;
+    /* background-size: cover; */
+    background-repeat: no-repeat;
+    color: var(--textColor);
+}
+
+.jumboWords{
+    width: 60%;
+    height: 60%;
+    text-align: center;
+    margin: auto;
+}
+
+img{
+    height: auto;
+    width: auto;
+}
+
+.row{
+    margin: auto;
+    text-align: center;
+}
+
+.myBoarder{
+    border-width: 5px;
+    border-color: azure;
+    border-style: dashed;
+    height: 300px;
+}

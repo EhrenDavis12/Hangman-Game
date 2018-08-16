@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Hangman</title>
+    <link rel="stylesheet" href="./assets/reset.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <script src="./assets/hangMan.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="jumbotron">
+                    <h1 class="jumboWords">Computer Hangman!!!</h1>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <h2>
+                    <span id="finalWordShown"></span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-md-6 myBoarder">
+                <img id="keyImage">
+            </div>
+            <div class="col-md-6 myBoarder">
+                <div class="row">
+                    <div class="col-sm-12">
+                            <h2>Word:
+                                <span id="guessingWordShown"></span>
+                            </h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                            <h2>Letters Guessed:
+                                <span id="lettersGuessedShown"></span>
+                            </h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                            <h2>Number of tries Left:
+                                <span id="numOfTriesShown"></span>
+                            </h2>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--  <div class="row">
+            <div class="col-md-6">
+                <h2>Word:
+                    <span id="guessingWordShown"></span>
+                </h2>
+            </div>
+            <div class="col-md-6">
+                <h2>Letters Guessed:
+                    <span id="lettersGuessedShown"></span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Number of tries Left:
+                    <span id="numOfTriesShown"></span>
+                </h2>
+            </div>
+            <div class="col-md-6">
+                <img id="keyImage" src="">
+            </div>
+        </div> -->
+    </div>
+    <script>
+
+        var lettersGuessed = [];
+        var dictionary = ["CPU", "Compact Disc", "floppy disk", "hard disk",
+            "Headphones", "Keyboard", "microphone", "MONITOR",
+            "Mouse", "Printer", "Speakers", "Web camera"];
+        var wordToBeGuessed = "";
+        var displayToBeGuessed = "";
+        var numberOfGuesses = 10;
+        var restartGame = false;
+        var finalWordShown = document.getElementById("finalWordShown");
+        var guessingWordShown = document.getElementById("guessingWordShown");
+        var LettersGuessedShown = document.getElementById("lettersGuessedShown");
+        var numOfTriesShown = document.getElementById("numOfTriesShown");
+        var keyImageShown = document.getElementById("keyImage");
+
+        window.onload = function (event) {
+            setGameUpToPlay();
+        }
+
+        function setGameUpToPlay() {
+            lettersGuessed = [];
+            wordToBeGuessed = getNewWordFromList();
+
+            finalWordShown.textContent = "Guess your word! Try not to die!";
+            renderDisplayWords();
+            numberOfGuesses = 10;
+            restartGame = false;
+            keyImageShown.hidden = true;
+            keyImageShown.src = "./assets/computerParts/" + wordToBeGuessed + ".jpg";
+        }
+
+        function getNewWordFromList() {
+            return dictionary[randomNumber(0, dictionary.length)].toLowerCase();
+        }
+
+        function randomNumber(min, max) {
+            return Math.floor(Math.random() * max) + min;
+        }
+
+        function renderDisplayWords() {
+            guessingWordShown.textContent = getDisplayOfWordToBeGuessed(wordToBeGuessed, lettersGuessed);
+            LettersGuessedShown.textContent = getDisplayOfGuessedLetters(lettersGuessed);
+            numOfTriesShown.textContent = numberOfGuesses;
+        }
+
+        function getDisplayOfWordToBeGuessed(word, lettersGuessed) {
+            let returnWord = "";
+            word.split("").forEach(letter => {
+                if (lettersGuessed.indexOf(letter) > -1) {
+                    returnWord += " " + letter;
+                } else if (letter === " ") {
+                    returnWord += "  "; //not working find something else;
+                } else {
+                    returnWord += " _";
+                }
+            });
+            return returnWord;
+        }
+
+        function getDisplayOfGuessedLetters(lettersGuessed) {
+            let returnWord = "";
+            lettersGuessed.forEach(letter => {
+                if (returnWord === "") {
+                    returnWord = letter
+                } else {
+                    returnWord += ", " + letter;
+                }
+            });
+            return returnWord;
+        }
+
+        document.onkeyup = function (event) {
+            //Get Player input
+            let playerChoice = event.key.charAt(0).toLowerCase();
+
+            if (restartGame) {
+                setGameUpToPlay();
+                renderDisplayWords();
+            } else if (isPlayerInputValid(playerChoice)) {
+                lettersGuessed.push(playerChoice);
+                manageGuessCount(playerChoice);
+                renderDisplayWords();
+                handlePlayerWin();
+                handlePlayerLose();
+            }
+        };
+
+        function isPlayerInputValid(playerChoice) {
+            if ((lettersGuessed.indexOf(playerChoice) === -1) &&
+                playerChoice.match("[a-z]"))
+                return true;
+            return false;
+        }
+
+        function manageGuessCount(playerChoice) {
+            if (wordToBeGuessed.split("").indexOf(playerChoice) === -1) { numberOfGuesses -= 1; }
+        }
+
+        function handlePlayerWin() {
+            try {
+                wordToBeGuessed.split("").forEach(letter => {
+                    if (lettersGuessed.indexOf(letter) === -1) {
+                        if (letter !== " ")
+                            throw "exit";
+                    }
+                });
+            } catch (e) {
+                return;
+            }
+            finalWordShown.textContent = "You Won!!! Hit any key to play again!";
+            restartGame = true;
+            keyImageShown.hidden = false;
+        }
+
+        function handlePlayerLose() {
+            if (numberOfGuesses < 1) {
+                finalWordShown.textContent = "Sorry You Lost!!! Hit any key to play again!";
+                restartGame = true;
+                keyImageShown.hidden = false;
+            }
+        }
+
+    </script>
+</body>
+
+</html>
