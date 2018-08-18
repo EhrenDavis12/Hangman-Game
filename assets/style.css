@@ -1,25 +1,32 @@
 :root{
     --textColor: white;
+    --headerColor: white;
     --backgroundColor: black;
+    --borderColor: white;
+    --font-family: 'Sawarabi Mincho', sans-serif;
 }
 
 body{
     background-color: var(--backgroundColor);
     color: var(--textColor);
+    background-image: url("/assets/webBKG.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: var(--font-family);
 }
 
 .jumbotron{
     background: url('/assets/banner.jpg') center center;
-    /* background-size: cover; */
+    background-size: cover;
     background-repeat: no-repeat;
-    color: var(--textColor);
+    color: var(--headerColor);
 }
 
 .jumboWords{
     width: 60%;
-    height: 60%;
+    height: 60%;/* 
     text-align: center;
-    margin: auto;
+    margin: auto; */
 }
 
 img{
@@ -34,7 +41,7 @@ img{
 
 .myBoarder{
     border-width: 5px;
-    border-color: azure;
+    border-color: var(--borderColor);
     border-style: dashed;
     height: 300px;
 }
