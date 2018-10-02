@@ -9,14 +9,14 @@
 body{
     background-color: var(--backgroundColor);
     color: var(--textColor);
-    background-image: url("/assets/webBKG.jpg");
+    /* background-image: url("/assets/webBKG.jpg") */;
     background-size: cover;
     background-repeat: no-repeat;
     font-family: var(--font-family);
 }
 
 .jumbotron{
-    background: url('/assets/banner.jpg') center center;
+    background: center center; /* url('/assets/banner.jpg') */
     background-size: cover;
     background-repeat: no-repeat;
     color: var(--headerColor);
